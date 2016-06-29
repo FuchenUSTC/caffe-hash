@@ -90,7 +90,7 @@ void convert_dataset(const char* feature_list_filename, const char*maping_list_f
 		   std::cout << "have get the " << i << " mapings \n";
    }
 
-   std::cout << "The feature check " << TotalFeature[55][14]<< " "<< TotalFeature[209][13] << " \n";
+   std::cout << "The feature check " << TotalFeature[55][14]<< " "<< TotalFeature[90][13] << " \n";
    std::cout << "The maping check " << TripletMaping[15][1] << " " << TripletMaping[123][2] << " \n";
    feature_list_in1.close();
    maping_list_in2.close();
@@ -242,12 +242,12 @@ void convert_dataset(const char* feature_list_filename, const char*maping_list_f
 
 int main(int argc, char** argv) {
 	argc = 7;
-	argv[1] = "D:\\17-MutilabelNusWide\\DataSet\\New_Nus_Sample\\Sample_List\\TestAndTrain_Label\\TripletLabel\\Testlabel.txt";
-	argv[2] = "D:\\17-MutilabelNusWide\\DataSet\\New_Nus_Sample\\Sample_List\\TestAndTrain_Label\\TripletLabel\\Val_map.txt";
-	argv[3] = "D:\\17-MutilabelNusWide\\DataSet\\New_Nus_Sample\\Sample_List\\TestAndTrain_Label\\TripletLabel\\Nus_ValLabel_ld";
-	argv[4] = "21";
-	argv[5] = "2100";
-	argv[6] = "500";
+	argv[1] = "D:\\45-VideoHashing\\CCV\\annotation\\TripletList\\ccv_sample_train_fc6.txt";
+	argv[2] = "D:\\45-VideoHashing\\CCV\\annotation\\TripletList\\triplet_ccv_train_map_shuf.txt";
+	argv[3] = "D:\\45-VideoHashing\\CCV\\annotation\\TripletList\\ccv_triplet_train_lvdb";
+	argv[4] = "4096";
+	argv[5] = "100";
+	argv[6] = "9500";
   if (argc != 7) {
     printf("This script converts the MNIST dataset to the leveldb format used\n"
            "by caffe to train a siamese network.\n"

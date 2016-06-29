@@ -61,10 +61,15 @@ int main(int argc, char** argv) {
   namespace gflags = google;
 #endif
   //
-  //argc = 4;
-  //argv[0] = "D:\\Cifar10\\image\\";
-  //argv[1] = "D:\\35-WeeklySupervisedLearning\\CIFAR10\\Weakly_Triplet\\triplet_0.1.txt";
-  //argv[2] = "D:\\35-WeeklySupervisedLearning\\CIFAR10\\Weakly_Triplet\\triplet_0.1.txt";
+  argc = 5;
+  argv[1] = "Y:\\CCV\\Frame\\";
+  argv[2] = "D:\\45-VideoHashing\\CCV\\annotation\\VideoTripletList\\video_five\\Video_ccv_test_triplet_five_shuffle.txt";
+  argv[3] = "D:\\45-VideoHashing\\CCV\\annotation\\VideoTripletList\\video_five\\Video_ccv_test_triplet_five_lmdb";
+  argv[4] = "14250";
+  FLAGS_backend = "lmdb";
+  FLAGS_resize_height = 256;
+  FLAGS_resize_width = 256;
+
 
 
   gflags::SetUsageMessage("Convert a set of images to the leveldb/lmdb\n"
@@ -105,8 +110,9 @@ int main(int argc, char** argv) {
 	lines3.push_back(filename3); //different image
 	i++;
     if (i % 1000 == 0)
-		std::cout << "have load " << i << "lines\n";
+		std::cout << "have load " << i << " triplet lines.\n";
   }
+  std::cout << "Start to make triplet DB." << std::endl;
   if (FLAGS_shuffle) {
     // randomly shuffle data
     LOG(INFO) << "Shuffling data";
@@ -144,9 +150,10 @@ int main(int argc, char** argv) {
 
   for (int line_id = 0; line_id < lines1.size(); ++line_id) {
     bool status;
-    //std::string enc = encode_type;
+    std::string enc = encode_type; // set the encode size manually
+
     //if (encoded && !enc.size()) {
-    //  // Guess the encoding type from the file name
+    ////   Guess the encoding type from the file name
     //  string fn = lines[line_id].first;
     //  size_t p = fn.rfind('.');
     //  if ( p == fn.npos )
@@ -158,7 +165,11 @@ int main(int argc, char** argv) {
         lines[line_id].second, resize_height, resize_width, is_color,
         enc, &datum);*/
 
-	status = MutilImageToData(root_folder + lines1[line_id], root_folder + lines2[line_id], root_folder+lines3[line_id], resize_height, resize_width, is_color, &datum);
+	status = MutilImageToData(root_folder + lines1[line_id], 
+		root_folder + lines2[line_id], 
+		root_folder+lines3[line_id], 
+		resize_height, resize_width, 
+		is_color, &datum);
     if (status == false) continue;
     if (check_size) {
       if (!data_size_initialized) {
@@ -183,8 +194,8 @@ int main(int argc, char** argv) {
       // Commit db
       txn->Commit();
       txn.reset(db->NewTransaction());
-      //LOG(ERROR) << "Processed " << count << " files.";
-	  std::cout << "Processed " << count << " files\n";
+      LOG(ERROR) << "Processed " << count << " files.\n";
+	  //std::cout << "Processed " << count << " files\n";
     }
   }
   // write the last batch

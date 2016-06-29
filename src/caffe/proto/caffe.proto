@@ -330,6 +330,7 @@ message LayerParameter {
   optional PairwiseRankingHingeLossParameter pairwise_ranking_hinge_loss_param=137;
   optional TripletConstraintRankingLossParameter triplet_constraint_ranking_loss_param=152;
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param=153;
+  optional TripletClipHingeLossParameter triplet_clip_hinge_loss_param=154;
   optional PseudoLabelCrossEntropyLossParameter pseudo_label_cross_entropy_loss_param = 198;
   optional CrossEntropyLossParameter cross_entropy_loss_param = 200;
   optional StdPseudoLabelEntropyLossParameter std_pseudo_label_entropy_loss_param = 199;
@@ -356,6 +357,7 @@ message LayerParameter {
   optional SoftmaxNoisyLabelLossParameter softmax_noisy_label_loss_param = 201;
   optional LatentGaussianParameter latent_guassian_param = 202;
   optional VarAutoEncoderLossParameter var_autoencoder_loss_param = 203;
+  optional PairWiseSampleLossParameter pairwise_sample_loss_param = 204;
 }
 
 // Message that stores parameters used to apply transformation
@@ -751,10 +753,21 @@ message MVNParameter {
   optional bool across_channels = 2 [default = false];
 }
 
+
 // Message that stores parameters used by PairwiseRankingHingeLossLayer
 message PairwiseRankingHingeLossParameter {
   //margin for dissimilar pair
   optional float margin = 1 [default = 1.0];
+}
+
+// Message that stores parameters used by PairwiseSampleLossLayer
+message PairWiseSampleLossParameter {
+  //margin for dissimilar pair
+  optional float margin = 1 [default = 1.0];
+  //the pair number
+  optional int32 num = 2 [default = 500];
+  //the noisy label use or not
+  optional bool noisy_flag = 3 [default = true];
 }
 
 // Message that stores parameters used by TripletConstraintRankingLossLayer
@@ -773,6 +786,19 @@ message TripletRankingHingeLossParameter{
    optional int32 dim = 1 [default = 10];
    //Margin
    optional float margin = 2 [default = 1];
+}
+
+// Message that stores parameters used by TripletClipHingeLossParameter
+message TripletClipHingeLossParameter{
+  //Dimension for computing
+  optional int32 dim = 1 [default = 10];
+  //Margin
+  optional float margin = 2 [default = 1];
+  //Frame number each Clip
+  optional int32 frame_num = 3 [default = 7];
+  //Lamda for leverage the influence betweent 
+  //Structure loss and triplet loss
+  optional float lamda = 4 [default = 0.5];
 }
 
 // Message that stores parameters used by StdPseudoLabelEntropyLoss
@@ -1076,6 +1102,7 @@ message V1LayerParameter {
     WINDOW_DATA = 24;
     THRESHOLD = 31;
 	TRIPLET_RANKING_HINGE_LOSS=40;
+	TRIPLET_CLIP_HINGE_LOSS=44;
 	PIECE_WISE_THRESHOLD=41;
 	NORMALIZE = 42;
 	TRIPLET_CONSTRAINT_RANKING_LOSS=43;
@@ -1088,6 +1115,7 @@ message V1LayerParameter {
 	SOFTMAX_NOISY_LABEL_LOSS = 100;
 	LATENT_GAUSSIAN = 101;
 	VAR_AUTOENCODER_LOSS = 102;
+	PAIRWISE_SAMPLE_LOSS = 103;
   }
   optional LayerType type = 5;
   repeated BlobProto blobs = 6;
@@ -1136,10 +1164,12 @@ message V1LayerParameter {
   optional LossParameter loss_param = 42;
   optional TripletConstraintRankingLossParameter triplet_constraint_ranking_loss_param=44;
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 45;
+  optional TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 49;
   optional NoisyTransParameter noisy_trans_param=86;
   optional RankNoisyTransParameter rank_noisy_trans_param=68;
   optional LatentGaussianParameter latent_guassian_param=46;
   optional VarAutoEncoderLossParameter var_autoencoder_loss_param = 47;
+  optional PairWiseSampleLossParameter pairwise_sample_loss_param = 48;
   optional V0LayerParameter layer = 1;
 }
 

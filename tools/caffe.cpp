@@ -308,6 +308,12 @@ int main(int argc, char** argv) {
   // Run tool or show usage.
   
   //For Debug
+  //argc = 2;
+  //argv[0] = "exe";
+  //argv[1] = "train";
+  //FLAGS_solver = "D:\\Clothing1M\\pairwise_network\\add_pair\\feature_pair_solver.prototxt";
+  //FLAGS_snapshot = "D:\\Clothing1M\\pairwise_network\\solverstate_1\\pairwise_model_iter_1500.solverstate";
+  //FLAGS_weights = "D:\\Clothing1M\\pairwise_network\\bvlc_reference_caffenet.caffemodel";
 
   caffe::GlobalInit(&argc, &argv);
   if (argc == 2) {

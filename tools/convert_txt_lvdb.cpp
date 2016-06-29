@@ -35,8 +35,10 @@ int main(int args, char** argv){ // usage: convert_binaryfea_lvdb feature_bin ou
 #endif
 
 	// set the path in debug
-	argv[1] = "D:\\45-VideoHashing\\CCV\\Code\\matlab\\.bin";
-	argv[2] = "D:\\Clothing1M\\fc6_feature\\1_test";
+	//argv[1] = "D:\\45-VideoHashing\\CCV\\Code\\matlab\\ccv_test_fc6.txt";
+	//argv[2] = "D:\\45-VideoHashing\\CCV\\Code\\matlab\\ccv_test_fea_fc6_lvdb";
+	//argv[3] = "500";
+	//argv[4] = "4096";
 	//argv[3] = "D:\\Clothing1M\\fc6_feature\\label\\noisy_train_label.txt";
 
 	// set the buff size of each lvdb
@@ -51,17 +53,16 @@ int main(int args, char** argv){ // usage: convert_binaryfea_lvdb feature_bin ou
 	char key[kMaxKeyLength];
 	std::string value;
 	// read the file of the binary files 
-	std::ifstream feature_in(argv[1], ios::binary); // to set the number of the feature
+	std::ifstream feature_in(argv[1], ios::in); // to set the number of the feature
 	std::vector<int> label;
-	int feature_num = 0;
-	int feature_dim = 0;
-	int type_size = 0;
-	feature_in.read((char*)(&feature_num), sizeof(feature_num));
-	feature_in.read((char*)(&feature_dim), sizeof(feature_dim));
-	feature_in.read((char*)(&type_size), sizeof(type_size));
+
+	int feature_num = atoi(argv[3]);
+	int feature_dim = atoi(argv[4]);
+
+
 	// set the feature label
-	if (args == 4){
-		std::ifstream label_in(argv[3], ios::in); // to set the label
+	if (args == 6){
+		std::ifstream label_in(argv[5], ios::in); // to set the label
 		for (int i = 0; i < feature_num; ++i){
 			int index;
 			label_in >> index;
@@ -79,15 +80,16 @@ int main(int args, char** argv){ // usage: convert_binaryfea_lvdb feature_bin ou
 		datum.set_channels(feature_dim);
 		datum.set_height(1);
 		datum.set_width(1);
-		Blob<float> vector;
-		vector.Reshape(1, feature_dim, 1, 1);
-		feature_in.read((char*)(vector.mutable_cpu_data()), type_size*feature_dim);
-		for (int j = 0; j < feature_dim; ++j) datum.add_float_data(vector.cpu_data()[j]);
+		float feature;
+		for (int j = 0; j < feature_dim; ++j){
+			feature_in >> feature;
+			datum.add_float_data(feature);
+		}
 		datum.set_label(label[i]);
 		datum.SerializePartialToString(&value);
 		_snprintf(key, kMaxKeyLength, "%08d", i);
 		db->Put(leveldb::WriteOptions(), std::string(key), value);
-		if (i % 10000 == 0) std::cout << "Have converted " << i << " binary feature.\n";
+		if (i % 10000 == 0) std::cout << "Have converted " << i << " txt feature.\n";
 	}
 
 	// delete the db

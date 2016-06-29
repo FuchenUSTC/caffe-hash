@@ -624,6 +624,49 @@ protected:
 	Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
 };
 
+// added by Fuchen Long in 4/26/2016. Used in the weakly supervised learning
+template <typename Dtype>
+class PairWiseSampleLossLayer : public LossLayer<Dtype>{
+public:
+	explicit PairWiseSampleLossLayer(const LayerParameter& param)
+		:LossLayer<Dtype>(param), diff_(){}
+	virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+		const vector<Blob<Dtype>*> &top);
+	virtual inline int ExactNumBottomBlobs() const{ return 3; }
+	virtual inline const char* type() const{ return "PairWiseSampleLoss"; }
+	virtual inline bool AllowForceBackward(const int bottom_index) const
+	{
+		return bottom_index == 0;
+	}
+protected:
+	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+		const vector<Blob<Dtype>*>& top);
+	virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+		const vector<bool>& propagate_dowm, const vector<Blob<Dtype>*>& bottom);
+	void Sample_pair(const vector<Blob<Dtype>*> &bottom);
+	void Sample_pair_pseudo(const vector<Blob<Dtype>*> &bottom);
+	void Get_max_index(const vector<Blob<Dtype>*> &bottom);
+	int pairwise_threshold;
+	int pairwise_num;
+	float p_margin;
+	int batch_size;
+	int fea_dim;
+	int class_dim;
+	bool noisy_label_flag;
+	Blob<Dtype> positive_sample;
+	Blob<Dtype> negative_sample;
+	Blob<Dtype> positive_class;
+	Blob<Dtype> negative_class;
+	Blob<Dtype> positive_index;
+	Blob<Dtype> negative_index;
+	Blob<Dtype> diff_;
+	Blob<Dtype> dist_sq_;
+	Blob<Dtype> alpha;
+	Blob<Dtype> gradient;
+	Blob<Dtype> pseudo_label_;
+ 
+};
+
 // added by Fuchen Long , used in the image hash coding
 template <typename Dtype>
 class TripletRankingHingeLossLayer : public LossLayer<Dtype>{
@@ -709,6 +752,52 @@ protected:
 	int class_num;
 	Blob<Dtype> label_buff;
 
+};
+
+// added by Fuchen Long in 6/21/2016
+// this layer is for the video clip hashing learning
+// and for retrieval application and deduplication application
+template<typename Dtype>
+class TripletClipHingeLossLayer : public LossLayer<Dtype>
+{
+public:
+	explicit TripletClipHingeLossLayer(const LayerParameter& param)
+		:LossLayer<Dtype>(param), diff_() {}
+	virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+		const vector<Blob<Dtype>*>& top);
+	virtual inline int ExactNumBottomBlobs() const { return 3; }
+	virtual inline const char* type() const{ return "TripletClipHingeLoss"; }
+	virtual inline bool AllowForceBackward(const int bottom_index) const
+	{
+		return bottom_index != 3;
+
+	}
+protected:
+	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+		const vector<Blob<Dtype>*>& top);
+	virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+		const vector<bool>& propagate_dowm, const vector<Blob<Dtype>*>& bottom);
+	void average_hashing(const vector<Blob<Dtype>*>& bottom);
+	Dtype compute_tripletloss(int batchsize,int Dimv);
+	Dtype compute_structureloss(const vector<Blob<Dtype>*>& bottom);
+	void compute_gradient_structure(int index,int hash_pos);
+	int dim;
+	int frame_num;
+	int batch;
+	Dtype margin;
+	Dtype lamda;
+	Blob<Dtype> diff_;
+	Blob<Dtype> dist_sq_;
+	Blob<Dtype> diff_sub_or_si; // F-F+
+	Blob<Dtype> diff_sub_or_di; // F-F-
+	Blob<Dtype> diff_pow_or_si; // ||F-F+||2
+	Blob<Dtype> diff_pow_or_di; // ||F-F-||2
+	Blob<Dtype> ave_or, ave_si, ave_di; // Aver(F,F+,F-)
+	Blob<Dtype> sub_or, sub_si, sub_di; // Subcessive(F,F+,F-)
+	Blob<Dtype> pow_sub_or, pow_sub_si, pow_sub_di; // PowX(sub(F,F+,F-))
+	Blob<Dtype> gradient_triplet;
+	Blob<Dtype> gradient_structure;
+	Blob<Dtype> gradient;
 };
 
 //added by Fuchen Long, used in the weekly supervised learning

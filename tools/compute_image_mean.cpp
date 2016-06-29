@@ -34,10 +34,10 @@ int main(int argc, char** argv) {
         "    compute_image_mean [FLAGS] INPUT_DB [OUTPUT_FILE]\n");
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-  /*argc = 3;
-  argv[1] = "D:\\Users\\v-fulong\\17_HashCoding\\Triplet_Cifar10_200w_ld_val";
-  argv[2] = "D:\\Users\\v-fulong\\17_HashCoding\\Triplet_Cifar10_200w_ld.bin";*/
-  FLAGS_backend = "leveldb";
+  argc = 3;
+  argv[1] = "D:\\44-ActivityNet\\LMDB\\ActivityNet_train_all_lmdb";
+  argv[2] = "D:\\44-ActivityNet\\LMDB\\audio_mean.bin";
+  FLAGS_backend = "lmdb";
   if (argc < 2 || argc > 3) {
     gflags::ShowUsageWithFlagsRestrict(argv[0], "tools/compute_image_mean");
     return 1;

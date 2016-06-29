@@ -143,8 +143,12 @@ bool ReadImageToDatum(const string& filename, const int label,
 }
 
 //added by fucheng long for hash code 8.15.2015
-bool MutilImageToData(const string& filename1,const string& filename2,const string& filename3,const int height, const int width,const bool is_color,
-	                  Datum* datum)
+bool MutilImageToData(const string& filename1,
+	const string& filename2,
+	const string& filename3,
+	const int height, const int width,
+	const bool is_color,
+	Datum* datum)
 
 {
 	cv::Mat cv_img1 = ReadImageToCVMat(filename1, height, width, is_color);
@@ -152,6 +156,7 @@ bool MutilImageToData(const string& filename1,const string& filename2,const stri
 	cv::Mat cv_img3 = ReadImageToCVMat(filename3, height, width, is_color);
 	if (cv_img1.data)
 	{
+		// Encode the image
 		/*if (encoding.size()){
 			std::vector<uchar> buf1;
 			std::vector<uchar> buf2;
@@ -167,7 +172,8 @@ bool MutilImageToData(const string& filename1,const string& filename2,const stri
 			datum->set_label(label);
 			datum->set_encoded(true);
 			return true;
-			}*/
+			}*/ 
+		// Not encode the image
 		MutiCVMatToDatum(cv_img1, cv_img2, cv_img3, datum);
 		datum->set_label(1);
 	}
@@ -341,7 +347,6 @@ void MutiCVMatToDatum(const cv::Mat& cv_img1, const cv::Mat& cv_img2, const cv::
 		}
 	}
 	datum->set_data(buffer);
-
 }
 
 // Verifies format of data stored in HDF5 file and reshapes blob accordingly.

@@ -75,8 +75,10 @@ class LRNParameter;
 class MemoryDataParameter;
 class MVNParameter;
 class PairwiseRankingHingeLossParameter;
+class PairWiseSampleLossParameter;
 class TripletConstraintRankingLossParameter;
 class TripletRankingHingeLossParameter;
+class TripletClipHingeLossParameter;
 class StdPseudoLabelEntropyLossParameter;
 class PseudoLabelCrossEntropyLossParameter;
 class CrossEntropyLossParameter;
@@ -440,6 +442,7 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_WINDOW_DATA = 24,
   V1LayerParameter_LayerType_THRESHOLD = 31,
   V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS = 40,
+  V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS = 44,
   V1LayerParameter_LayerType_PIECE_WISE_THRESHOLD = 41,
   V1LayerParameter_LayerType_NORMALIZE = 42,
   V1LayerParameter_LayerType_TRIPLET_CONSTRAINT_RANKING_LOSS = 43,
@@ -451,11 +454,12 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_UNPOOLING = 91,
   V1LayerParameter_LayerType_SOFTMAX_NOISY_LABEL_LOSS = 100,
   V1LayerParameter_LayerType_LATENT_GAUSSIAN = 101,
-  V1LayerParameter_LayerType_VAR_AUTOENCODER_LOSS = 102
+  V1LayerParameter_LayerType_VAR_AUTOENCODER_LOSS = 102,
+  V1LayerParameter_LayerType_PAIRWISE_SAMPLE_LOSS = 103
 };
 bool V1LayerParameter_LayerType_IsValid(int value);
 const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MIN = V1LayerParameter_LayerType_NONE;
-const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_VAR_AUTOENCODER_LOSS;
+const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_PAIRWISE_SAMPLE_LOSS;
 const int V1LayerParameter_LayerType_LayerType_ARRAYSIZE = V1LayerParameter_LayerType_LayerType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* V1LayerParameter_LayerType_descriptor();
@@ -2770,6 +2774,15 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::TripletRankingHingeLossParameter* release_triplet_ranking_hinge_loss_param();
   inline void set_allocated_triplet_ranking_hinge_loss_param(::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param);
 
+  // optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 154;
+  inline bool has_triplet_clip_hinge_loss_param() const;
+  inline void clear_triplet_clip_hinge_loss_param();
+  static const int kTripletClipHingeLossParamFieldNumber = 154;
+  inline const ::caffe::TripletClipHingeLossParameter& triplet_clip_hinge_loss_param() const;
+  inline ::caffe::TripletClipHingeLossParameter* mutable_triplet_clip_hinge_loss_param();
+  inline ::caffe::TripletClipHingeLossParameter* release_triplet_clip_hinge_loss_param();
+  inline void set_allocated_triplet_clip_hinge_loss_param(::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param);
+
   // optional .caffe.PseudoLabelCrossEntropyLossParameter pseudo_label_cross_entropy_loss_param = 198;
   inline bool has_pseudo_label_cross_entropy_loss_param() const;
   inline void clear_pseudo_label_cross_entropy_loss_param();
@@ -3004,6 +3017,15 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::VarAutoEncoderLossParameter* release_var_autoencoder_loss_param();
   inline void set_allocated_var_autoencoder_loss_param(::caffe::VarAutoEncoderLossParameter* var_autoencoder_loss_param);
 
+  // optional .caffe.PairWiseSampleLossParameter pairwise_sample_loss_param = 204;
+  inline bool has_pairwise_sample_loss_param() const;
+  inline void clear_pairwise_sample_loss_param();
+  static const int kPairwiseSampleLossParamFieldNumber = 204;
+  inline const ::caffe::PairWiseSampleLossParameter& pairwise_sample_loss_param() const;
+  inline ::caffe::PairWiseSampleLossParameter* mutable_pairwise_sample_loss_param();
+  inline ::caffe::PairWiseSampleLossParameter* release_pairwise_sample_loss_param();
+  inline void set_allocated_pairwise_sample_loss_param(::caffe::PairWiseSampleLossParameter* pairwise_sample_loss_param);
+
   // @@protoc_insertion_point(class_scope:caffe.LayerParameter)
  private:
   inline void set_has_name();
@@ -3068,6 +3090,8 @@ class LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_triplet_constraint_ranking_loss_param();
   inline void set_has_triplet_ranking_hinge_loss_param();
   inline void clear_has_triplet_ranking_hinge_loss_param();
+  inline void set_has_triplet_clip_hinge_loss_param();
+  inline void clear_has_triplet_clip_hinge_loss_param();
   inline void set_has_pseudo_label_cross_entropy_loss_param();
   inline void clear_has_pseudo_label_cross_entropy_loss_param();
   inline void set_has_cross_entropy_loss_param();
@@ -3120,10 +3144,13 @@ class LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_latent_guassian_param();
   inline void set_has_var_autoencoder_loss_param();
   inline void clear_has_var_autoencoder_loss_param();
+  inline void set_has_pairwise_sample_loss_param();
+  inline void clear_has_pairwise_sample_loss_param();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::uint32 _has_bits_[2];
+  ::google::protobuf::uint32 _has_bits_[3];
+  mutable int _cached_size_;
   ::std::string* name_;
   ::std::string* type_;
   ::google::protobuf::RepeatedPtrField< ::std::string> bottom_;
@@ -3161,6 +3188,7 @@ class LayerParameter : public ::google::protobuf::Message {
   ::caffe::PairwiseRankingHingeLossParameter* pairwise_ranking_hinge_loss_param_;
   ::caffe::TripletConstraintRankingLossParameter* triplet_constraint_ranking_loss_param_;
   ::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param_;
+  ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
   ::caffe::PseudoLabelCrossEntropyLossParameter* pseudo_label_cross_entropy_loss_param_;
   ::caffe::CrossEntropyLossParameter* cross_entropy_loss_param_;
   ::caffe::StdPseudoLabelEntropyLossParameter* std_pseudo_label_entropy_loss_param_;
@@ -3187,8 +3215,8 @@ class LayerParameter : public ::google::protobuf::Message {
   ::caffe::SoftmaxNoisyLabelLossParameter* softmax_noisy_label_loss_param_;
   ::caffe::LatentGaussianParameter* latent_guassian_param_;
   ::caffe::VarAutoEncoderLossParameter* var_autoencoder_loss_param_;
+  ::caffe::PairWiseSampleLossParameter* pairwise_sample_loss_param_;
   int phase_;
-  mutable int _cached_size_;
   friend void  protobuf_AddDesc_caffe_2eproto();
   friend void protobuf_AssignDesc_caffe_2eproto();
   friend void protobuf_ShutdownFile_caffe_2eproto();
@@ -6699,6 +6727,105 @@ class PairwiseRankingHingeLossParameter : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class PairWiseSampleLossParameter : public ::google::protobuf::Message {
+ public:
+  PairWiseSampleLossParameter();
+  virtual ~PairWiseSampleLossParameter();
+
+  PairWiseSampleLossParameter(const PairWiseSampleLossParameter& from);
+
+  inline PairWiseSampleLossParameter& operator=(const PairWiseSampleLossParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PairWiseSampleLossParameter& default_instance();
+
+  void Swap(PairWiseSampleLossParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  PairWiseSampleLossParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PairWiseSampleLossParameter& from);
+  void MergeFrom(const PairWiseSampleLossParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional float margin = 1 [default = 1];
+  inline bool has_margin() const;
+  inline void clear_margin();
+  static const int kMarginFieldNumber = 1;
+  inline float margin() const;
+  inline void set_margin(float value);
+
+  // optional int32 num = 2 [default = 500];
+  inline bool has_num() const;
+  inline void clear_num();
+  static const int kNumFieldNumber = 2;
+  inline ::google::protobuf::int32 num() const;
+  inline void set_num(::google::protobuf::int32 value);
+
+  // optional bool noisy_flag = 3 [default = true];
+  inline bool has_noisy_flag() const;
+  inline void clear_noisy_flag();
+  static const int kNoisyFlagFieldNumber = 3;
+  inline bool noisy_flag() const;
+  inline void set_noisy_flag(bool value);
+
+  // @@protoc_insertion_point(class_scope:caffe.PairWiseSampleLossParameter)
+ private:
+  inline void set_has_margin();
+  inline void clear_has_margin();
+  inline void set_has_num();
+  inline void clear_has_num();
+  inline void set_has_noisy_flag();
+  inline void clear_has_noisy_flag();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  float margin_;
+  ::google::protobuf::int32 num_;
+  bool noisy_flag_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static PairWiseSampleLossParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class TripletConstraintRankingLossParameter : public ::google::protobuf::Message {
  public:
   TripletConstraintRankingLossParameter();
@@ -6884,6 +7011,115 @@ class TripletRankingHingeLossParameter : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static TripletRankingHingeLossParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class TripletClipHingeLossParameter : public ::google::protobuf::Message {
+ public:
+  TripletClipHingeLossParameter();
+  virtual ~TripletClipHingeLossParameter();
+
+  TripletClipHingeLossParameter(const TripletClipHingeLossParameter& from);
+
+  inline TripletClipHingeLossParameter& operator=(const TripletClipHingeLossParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TripletClipHingeLossParameter& default_instance();
+
+  void Swap(TripletClipHingeLossParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  TripletClipHingeLossParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const TripletClipHingeLossParameter& from);
+  void MergeFrom(const TripletClipHingeLossParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 dim = 1 [default = 10];
+  inline bool has_dim() const;
+  inline void clear_dim();
+  static const int kDimFieldNumber = 1;
+  inline ::google::protobuf::int32 dim() const;
+  inline void set_dim(::google::protobuf::int32 value);
+
+  // optional float margin = 2 [default = 1];
+  inline bool has_margin() const;
+  inline void clear_margin();
+  static const int kMarginFieldNumber = 2;
+  inline float margin() const;
+  inline void set_margin(float value);
+
+  // optional int32 frame_num = 3 [default = 7];
+  inline bool has_frame_num() const;
+  inline void clear_frame_num();
+  static const int kFrameNumFieldNumber = 3;
+  inline ::google::protobuf::int32 frame_num() const;
+  inline void set_frame_num(::google::protobuf::int32 value);
+
+  // optional float lamda = 4 [default = 0.5];
+  inline bool has_lamda() const;
+  inline void clear_lamda();
+  static const int kLamdaFieldNumber = 4;
+  inline float lamda() const;
+  inline void set_lamda(float value);
+
+  // @@protoc_insertion_point(class_scope:caffe.TripletClipHingeLossParameter)
+ private:
+  inline void set_has_dim();
+  inline void clear_has_dim();
+  inline void set_has_margin();
+  inline void clear_has_margin();
+  inline void set_has_frame_num();
+  inline void clear_has_frame_num();
+  inline void set_has_lamda();
+  inline void clear_has_lamda();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 dim_;
+  float margin_;
+  ::google::protobuf::int32 frame_num_;
+  float lamda_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static TripletClipHingeLossParameter* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -9413,6 +9649,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static const LayerType THRESHOLD = V1LayerParameter_LayerType_THRESHOLD;
   static const LayerType TRIPLET_RANKING_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS;
+  static const LayerType TRIPLET_CLIP_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS;
   static const LayerType PIECE_WISE_THRESHOLD = V1LayerParameter_LayerType_PIECE_WISE_THRESHOLD;
   static const LayerType NORMALIZE = V1LayerParameter_LayerType_NORMALIZE;
   static const LayerType TRIPLET_CONSTRAINT_RANKING_LOSS = V1LayerParameter_LayerType_TRIPLET_CONSTRAINT_RANKING_LOSS;
@@ -9425,6 +9662,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType SOFTMAX_NOISY_LABEL_LOSS = V1LayerParameter_LayerType_SOFTMAX_NOISY_LABEL_LOSS;
   static const LayerType LATENT_GAUSSIAN = V1LayerParameter_LayerType_LATENT_GAUSSIAN;
   static const LayerType VAR_AUTOENCODER_LOSS = V1LayerParameter_LayerType_VAR_AUTOENCODER_LOSS;
+  static const LayerType PAIRWISE_SAMPLE_LOSS = V1LayerParameter_LayerType_PAIRWISE_SAMPLE_LOSS;
   static inline bool LayerType_IsValid(int value) {
     return V1LayerParameter_LayerType_IsValid(value);
   }
@@ -9945,6 +10183,15 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::TripletRankingHingeLossParameter* release_triplet_ranking_hinge_loss_param();
   inline void set_allocated_triplet_ranking_hinge_loss_param(::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param);
 
+  // optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 49;
+  inline bool has_triplet_clip_hinge_loss_param() const;
+  inline void clear_triplet_clip_hinge_loss_param();
+  static const int kTripletClipHingeLossParamFieldNumber = 49;
+  inline const ::caffe::TripletClipHingeLossParameter& triplet_clip_hinge_loss_param() const;
+  inline ::caffe::TripletClipHingeLossParameter* mutable_triplet_clip_hinge_loss_param();
+  inline ::caffe::TripletClipHingeLossParameter* release_triplet_clip_hinge_loss_param();
+  inline void set_allocated_triplet_clip_hinge_loss_param(::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param);
+
   // optional .caffe.NoisyTransParameter noisy_trans_param = 86;
   inline bool has_noisy_trans_param() const;
   inline void clear_noisy_trans_param();
@@ -9980,6 +10227,15 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::VarAutoEncoderLossParameter* mutable_var_autoencoder_loss_param();
   inline ::caffe::VarAutoEncoderLossParameter* release_var_autoencoder_loss_param();
   inline void set_allocated_var_autoencoder_loss_param(::caffe::VarAutoEncoderLossParameter* var_autoencoder_loss_param);
+
+  // optional .caffe.PairWiseSampleLossParameter pairwise_sample_loss_param = 48;
+  inline bool has_pairwise_sample_loss_param() const;
+  inline void clear_pairwise_sample_loss_param();
+  static const int kPairwiseSampleLossParamFieldNumber = 48;
+  inline const ::caffe::PairWiseSampleLossParameter& pairwise_sample_loss_param() const;
+  inline ::caffe::PairWiseSampleLossParameter* mutable_pairwise_sample_loss_param();
+  inline ::caffe::PairWiseSampleLossParameter* release_pairwise_sample_loss_param();
+  inline void set_allocated_pairwise_sample_loss_param(::caffe::PairWiseSampleLossParameter* pairwise_sample_loss_param);
 
   // optional .caffe.V0LayerParameter layer = 1;
   inline bool has_layer() const;
@@ -10068,6 +10324,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_triplet_constraint_ranking_loss_param();
   inline void set_has_triplet_ranking_hinge_loss_param();
   inline void clear_has_triplet_ranking_hinge_loss_param();
+  inline void set_has_triplet_clip_hinge_loss_param();
+  inline void clear_has_triplet_clip_hinge_loss_param();
   inline void set_has_noisy_trans_param();
   inline void clear_has_noisy_trans_param();
   inline void set_has_rank_noisy_trans_param();
@@ -10076,6 +10334,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_latent_guassian_param();
   inline void set_has_var_autoencoder_loss_param();
   inline void clear_has_var_autoencoder_loss_param();
+  inline void set_has_pairwise_sample_loss_param();
+  inline void clear_has_pairwise_sample_loss_param();
   inline void set_has_layer();
   inline void clear_has_layer();
 
@@ -10129,10 +10389,12 @@ class V1LayerParameter : public ::google::protobuf::Message {
   ::caffe::LossParameter* loss_param_;
   ::caffe::TripletConstraintRankingLossParameter* triplet_constraint_ranking_loss_param_;
   ::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param_;
+  ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
   ::caffe::NoisyTransParameter* noisy_trans_param_;
   ::caffe::RankNoisyTransParameter* rank_noisy_trans_param_;
   ::caffe::LatentGaussianParameter* latent_guassian_param_;
   ::caffe::VarAutoEncoderLossParameter* var_autoencoder_loss_param_;
+  ::caffe::PairWiseSampleLossParameter* pairwise_sample_loss_param_;
   ::caffe::V0LayerParameter* layer_;
   int type_;
   mutable int _cached_size_;
@@ -15243,15 +15505,56 @@ inline void LayerParameter::set_allocated_triplet_ranking_hinge_loss_param(::caf
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
 }
 
-// optional .caffe.PseudoLabelCrossEntropyLossParameter pseudo_label_cross_entropy_loss_param = 198;
-inline bool LayerParameter::has_pseudo_label_cross_entropy_loss_param() const {
+// optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 154;
+inline bool LayerParameter::has_triplet_clip_hinge_loss_param() const {
   return (_has_bits_[1] & 0x00000040u) != 0;
 }
-inline void LayerParameter::set_has_pseudo_label_cross_entropy_loss_param() {
+inline void LayerParameter::set_has_triplet_clip_hinge_loss_param() {
   _has_bits_[1] |= 0x00000040u;
 }
-inline void LayerParameter::clear_has_pseudo_label_cross_entropy_loss_param() {
+inline void LayerParameter::clear_has_triplet_clip_hinge_loss_param() {
   _has_bits_[1] &= ~0x00000040u;
+}
+inline void LayerParameter::clear_triplet_clip_hinge_loss_param() {
+  if (triplet_clip_hinge_loss_param_ != NULL) triplet_clip_hinge_loss_param_->::caffe::TripletClipHingeLossParameter::Clear();
+  clear_has_triplet_clip_hinge_loss_param();
+}
+inline const ::caffe::TripletClipHingeLossParameter& LayerParameter::triplet_clip_hinge_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.triplet_clip_hinge_loss_param)
+  return triplet_clip_hinge_loss_param_ != NULL ? *triplet_clip_hinge_loss_param_ : *default_instance_->triplet_clip_hinge_loss_param_;
+}
+inline ::caffe::TripletClipHingeLossParameter* LayerParameter::mutable_triplet_clip_hinge_loss_param() {
+  set_has_triplet_clip_hinge_loss_param();
+  if (triplet_clip_hinge_loss_param_ == NULL) triplet_clip_hinge_loss_param_ = new ::caffe::TripletClipHingeLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.triplet_clip_hinge_loss_param)
+  return triplet_clip_hinge_loss_param_;
+}
+inline ::caffe::TripletClipHingeLossParameter* LayerParameter::release_triplet_clip_hinge_loss_param() {
+  clear_has_triplet_clip_hinge_loss_param();
+  ::caffe::TripletClipHingeLossParameter* temp = triplet_clip_hinge_loss_param_;
+  triplet_clip_hinge_loss_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_triplet_clip_hinge_loss_param(::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param) {
+  delete triplet_clip_hinge_loss_param_;
+  triplet_clip_hinge_loss_param_ = triplet_clip_hinge_loss_param;
+  if (triplet_clip_hinge_loss_param) {
+    set_has_triplet_clip_hinge_loss_param();
+  } else {
+    clear_has_triplet_clip_hinge_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.triplet_clip_hinge_loss_param)
+}
+
+// optional .caffe.PseudoLabelCrossEntropyLossParameter pseudo_label_cross_entropy_loss_param = 198;
+inline bool LayerParameter::has_pseudo_label_cross_entropy_loss_param() const {
+  return (_has_bits_[1] & 0x00000080u) != 0;
+}
+inline void LayerParameter::set_has_pseudo_label_cross_entropy_loss_param() {
+  _has_bits_[1] |= 0x00000080u;
+}
+inline void LayerParameter::clear_has_pseudo_label_cross_entropy_loss_param() {
+  _has_bits_[1] &= ~0x00000080u;
 }
 inline void LayerParameter::clear_pseudo_label_cross_entropy_loss_param() {
   if (pseudo_label_cross_entropy_loss_param_ != NULL) pseudo_label_cross_entropy_loss_param_->::caffe::PseudoLabelCrossEntropyLossParameter::Clear();
@@ -15286,13 +15589,13 @@ inline void LayerParameter::set_allocated_pseudo_label_cross_entropy_loss_param(
 
 // optional .caffe.CrossEntropyLossParameter cross_entropy_loss_param = 200;
 inline bool LayerParameter::has_cross_entropy_loss_param() const {
-  return (_has_bits_[1] & 0x00000080u) != 0;
+  return (_has_bits_[1] & 0x00000100u) != 0;
 }
 inline void LayerParameter::set_has_cross_entropy_loss_param() {
-  _has_bits_[1] |= 0x00000080u;
+  _has_bits_[1] |= 0x00000100u;
 }
 inline void LayerParameter::clear_has_cross_entropy_loss_param() {
-  _has_bits_[1] &= ~0x00000080u;
+  _has_bits_[1] &= ~0x00000100u;
 }
 inline void LayerParameter::clear_cross_entropy_loss_param() {
   if (cross_entropy_loss_param_ != NULL) cross_entropy_loss_param_->::caffe::CrossEntropyLossParameter::Clear();
@@ -15327,13 +15630,13 @@ inline void LayerParameter::set_allocated_cross_entropy_loss_param(::caffe::Cros
 
 // optional .caffe.StdPseudoLabelEntropyLossParameter std_pseudo_label_entropy_loss_param = 199;
 inline bool LayerParameter::has_std_pseudo_label_entropy_loss_param() const {
-  return (_has_bits_[1] & 0x00000100u) != 0;
+  return (_has_bits_[1] & 0x00000200u) != 0;
 }
 inline void LayerParameter::set_has_std_pseudo_label_entropy_loss_param() {
-  _has_bits_[1] |= 0x00000100u;
+  _has_bits_[1] |= 0x00000200u;
 }
 inline void LayerParameter::clear_has_std_pseudo_label_entropy_loss_param() {
-  _has_bits_[1] &= ~0x00000100u;
+  _has_bits_[1] &= ~0x00000200u;
 }
 inline void LayerParameter::clear_std_pseudo_label_entropy_loss_param() {
   if (std_pseudo_label_entropy_loss_param_ != NULL) std_pseudo_label_entropy_loss_param_->::caffe::StdPseudoLabelEntropyLossParameter::Clear();
@@ -15368,13 +15671,13 @@ inline void LayerParameter::set_allocated_std_pseudo_label_entropy_loss_param(::
 
 // optional .caffe.PartSortParameter part_sort_param = 142;
 inline bool LayerParameter::has_part_sort_param() const {
-  return (_has_bits_[1] & 0x00000200u) != 0;
+  return (_has_bits_[1] & 0x00000400u) != 0;
 }
 inline void LayerParameter::set_has_part_sort_param() {
-  _has_bits_[1] |= 0x00000200u;
+  _has_bits_[1] |= 0x00000400u;
 }
 inline void LayerParameter::clear_has_part_sort_param() {
-  _has_bits_[1] &= ~0x00000200u;
+  _has_bits_[1] &= ~0x00000400u;
 }
 inline void LayerParameter::clear_part_sort_param() {
   if (part_sort_param_ != NULL) part_sort_param_->::caffe::PartSortParameter::Clear();
@@ -15409,13 +15712,13 @@ inline void LayerParameter::set_allocated_part_sort_param(::caffe::PartSortParam
 
 // optional .caffe.PoolingParameter pooling_param = 121;
 inline bool LayerParameter::has_pooling_param() const {
-  return (_has_bits_[1] & 0x00000400u) != 0;
+  return (_has_bits_[1] & 0x00000800u) != 0;
 }
 inline void LayerParameter::set_has_pooling_param() {
-  _has_bits_[1] |= 0x00000400u;
+  _has_bits_[1] |= 0x00000800u;
 }
 inline void LayerParameter::clear_has_pooling_param() {
-  _has_bits_[1] &= ~0x00000400u;
+  _has_bits_[1] &= ~0x00000800u;
 }
 inline void LayerParameter::clear_pooling_param() {
   if (pooling_param_ != NULL) pooling_param_->::caffe::PoolingParameter::Clear();
@@ -15450,13 +15753,13 @@ inline void LayerParameter::set_allocated_pooling_param(::caffe::PoolingParamete
 
 // optional .caffe.PowerParameter power_param = 122;
 inline bool LayerParameter::has_power_param() const {
-  return (_has_bits_[1] & 0x00000800u) != 0;
+  return (_has_bits_[1] & 0x00001000u) != 0;
 }
 inline void LayerParameter::set_has_power_param() {
-  _has_bits_[1] |= 0x00000800u;
+  _has_bits_[1] |= 0x00001000u;
 }
 inline void LayerParameter::clear_has_power_param() {
-  _has_bits_[1] &= ~0x00000800u;
+  _has_bits_[1] &= ~0x00001000u;
 }
 inline void LayerParameter::clear_power_param() {
   if (power_param_ != NULL) power_param_->::caffe::PowerParameter::Clear();
@@ -15491,13 +15794,13 @@ inline void LayerParameter::set_allocated_power_param(::caffe::PowerParameter* p
 
 // optional .caffe.PReLUParameter prelu_param = 131;
 inline bool LayerParameter::has_prelu_param() const {
-  return (_has_bits_[1] & 0x00001000u) != 0;
+  return (_has_bits_[1] & 0x00002000u) != 0;
 }
 inline void LayerParameter::set_has_prelu_param() {
-  _has_bits_[1] |= 0x00001000u;
+  _has_bits_[1] |= 0x00002000u;
 }
 inline void LayerParameter::clear_has_prelu_param() {
-  _has_bits_[1] &= ~0x00001000u;
+  _has_bits_[1] &= ~0x00002000u;
 }
 inline void LayerParameter::clear_prelu_param() {
   if (prelu_param_ != NULL) prelu_param_->::caffe::PReLUParameter::Clear();
@@ -15532,13 +15835,13 @@ inline void LayerParameter::set_allocated_prelu_param(::caffe::PReLUParameter* p
 
 // optional .caffe.PythonParameter python_param = 130;
 inline bool LayerParameter::has_python_param() const {
-  return (_has_bits_[1] & 0x00002000u) != 0;
+  return (_has_bits_[1] & 0x00004000u) != 0;
 }
 inline void LayerParameter::set_has_python_param() {
-  _has_bits_[1] |= 0x00002000u;
+  _has_bits_[1] |= 0x00004000u;
 }
 inline void LayerParameter::clear_has_python_param() {
-  _has_bits_[1] &= ~0x00002000u;
+  _has_bits_[1] &= ~0x00004000u;
 }
 inline void LayerParameter::clear_python_param() {
   if (python_param_ != NULL) python_param_->::caffe::PythonParameter::Clear();
@@ -15573,13 +15876,13 @@ inline void LayerParameter::set_allocated_python_param(::caffe::PythonParameter*
 
 // optional .caffe.RCSParameter rcs_param = 144;
 inline bool LayerParameter::has_rcs_param() const {
-  return (_has_bits_[1] & 0x00004000u) != 0;
+  return (_has_bits_[1] & 0x00008000u) != 0;
 }
 inline void LayerParameter::set_has_rcs_param() {
-  _has_bits_[1] |= 0x00004000u;
+  _has_bits_[1] |= 0x00008000u;
 }
 inline void LayerParameter::clear_has_rcs_param() {
-  _has_bits_[1] &= ~0x00004000u;
+  _has_bits_[1] &= ~0x00008000u;
 }
 inline void LayerParameter::clear_rcs_param() {
   if (rcs_param_ != NULL) rcs_param_->::caffe::RCSParameter::Clear();
@@ -15614,13 +15917,13 @@ inline void LayerParameter::set_allocated_rcs_param(::caffe::RCSParameter* rcs_p
 
 // optional .caffe.RecurrentParameter recurrent_param = 134;
 inline bool LayerParameter::has_recurrent_param() const {
-  return (_has_bits_[1] & 0x00008000u) != 0;
+  return (_has_bits_[1] & 0x00010000u) != 0;
 }
 inline void LayerParameter::set_has_recurrent_param() {
-  _has_bits_[1] |= 0x00008000u;
+  _has_bits_[1] |= 0x00010000u;
 }
 inline void LayerParameter::clear_has_recurrent_param() {
-  _has_bits_[1] &= ~0x00008000u;
+  _has_bits_[1] &= ~0x00010000u;
 }
 inline void LayerParameter::clear_recurrent_param() {
   if (recurrent_param_ != NULL) recurrent_param_->::caffe::RecurrentParameter::Clear();
@@ -15655,13 +15958,13 @@ inline void LayerParameter::set_allocated_recurrent_param(::caffe::RecurrentPara
 
 // optional .caffe.ReLUParameter relu_param = 123;
 inline bool LayerParameter::has_relu_param() const {
-  return (_has_bits_[1] & 0x00010000u) != 0;
+  return (_has_bits_[1] & 0x00020000u) != 0;
 }
 inline void LayerParameter::set_has_relu_param() {
-  _has_bits_[1] |= 0x00010000u;
+  _has_bits_[1] |= 0x00020000u;
 }
 inline void LayerParameter::clear_has_relu_param() {
-  _has_bits_[1] &= ~0x00010000u;
+  _has_bits_[1] &= ~0x00020000u;
 }
 inline void LayerParameter::clear_relu_param() {
   if (relu_param_ != NULL) relu_param_->::caffe::ReLUParameter::Clear();
@@ -15696,13 +15999,13 @@ inline void LayerParameter::set_allocated_relu_param(::caffe::ReLUParameter* rel
 
 // optional .caffe.ReshapeParameter reshape_param = 133;
 inline bool LayerParameter::has_reshape_param() const {
-  return (_has_bits_[1] & 0x00020000u) != 0;
+  return (_has_bits_[1] & 0x00040000u) != 0;
 }
 inline void LayerParameter::set_has_reshape_param() {
-  _has_bits_[1] |= 0x00020000u;
+  _has_bits_[1] |= 0x00040000u;
 }
 inline void LayerParameter::clear_has_reshape_param() {
-  _has_bits_[1] &= ~0x00020000u;
+  _has_bits_[1] &= ~0x00040000u;
 }
 inline void LayerParameter::clear_reshape_param() {
   if (reshape_param_ != NULL) reshape_param_->::caffe::ReshapeParameter::Clear();
@@ -15737,13 +16040,13 @@ inline void LayerParameter::set_allocated_reshape_param(::caffe::ReshapeParamete
 
 // optional .caffe.SigmoidParameter sigmoid_param = 124;
 inline bool LayerParameter::has_sigmoid_param() const {
-  return (_has_bits_[1] & 0x00040000u) != 0;
+  return (_has_bits_[1] & 0x00080000u) != 0;
 }
 inline void LayerParameter::set_has_sigmoid_param() {
-  _has_bits_[1] |= 0x00040000u;
+  _has_bits_[1] |= 0x00080000u;
 }
 inline void LayerParameter::clear_has_sigmoid_param() {
-  _has_bits_[1] &= ~0x00040000u;
+  _has_bits_[1] &= ~0x00080000u;
 }
 inline void LayerParameter::clear_sigmoid_param() {
   if (sigmoid_param_ != NULL) sigmoid_param_->::caffe::SigmoidParameter::Clear();
@@ -15778,13 +16081,13 @@ inline void LayerParameter::set_allocated_sigmoid_param(::caffe::SigmoidParamete
 
 // optional .caffe.SoftmaxParameter softmax_param = 125;
 inline bool LayerParameter::has_softmax_param() const {
-  return (_has_bits_[1] & 0x00080000u) != 0;
+  return (_has_bits_[1] & 0x00100000u) != 0;
 }
 inline void LayerParameter::set_has_softmax_param() {
-  _has_bits_[1] |= 0x00080000u;
+  _has_bits_[1] |= 0x00100000u;
 }
 inline void LayerParameter::clear_has_softmax_param() {
-  _has_bits_[1] &= ~0x00080000u;
+  _has_bits_[1] &= ~0x00100000u;
 }
 inline void LayerParameter::clear_softmax_param() {
   if (softmax_param_ != NULL) softmax_param_->::caffe::SoftmaxParameter::Clear();
@@ -15819,13 +16122,13 @@ inline void LayerParameter::set_allocated_softmax_param(::caffe::SoftmaxParamete
 
 // optional .caffe.SliceParameter slice_param = 126;
 inline bool LayerParameter::has_slice_param() const {
-  return (_has_bits_[1] & 0x00100000u) != 0;
+  return (_has_bits_[1] & 0x00200000u) != 0;
 }
 inline void LayerParameter::set_has_slice_param() {
-  _has_bits_[1] |= 0x00100000u;
+  _has_bits_[1] |= 0x00200000u;
 }
 inline void LayerParameter::clear_has_slice_param() {
-  _has_bits_[1] &= ~0x00100000u;
+  _has_bits_[1] &= ~0x00200000u;
 }
 inline void LayerParameter::clear_slice_param() {
   if (slice_param_ != NULL) slice_param_->::caffe::SliceParameter::Clear();
@@ -15860,13 +16163,13 @@ inline void LayerParameter::set_allocated_slice_param(::caffe::SliceParameter* s
 
 // optional .caffe.SortParameter sort_param = 140;
 inline bool LayerParameter::has_sort_param() const {
-  return (_has_bits_[1] & 0x00200000u) != 0;
+  return (_has_bits_[1] & 0x00400000u) != 0;
 }
 inline void LayerParameter::set_has_sort_param() {
-  _has_bits_[1] |= 0x00200000u;
+  _has_bits_[1] |= 0x00400000u;
 }
 inline void LayerParameter::clear_has_sort_param() {
-  _has_bits_[1] &= ~0x00200000u;
+  _has_bits_[1] &= ~0x00400000u;
 }
 inline void LayerParameter::clear_sort_param() {
   if (sort_param_ != NULL) sort_param_->::caffe::SortParameter::Clear();
@@ -15901,13 +16204,13 @@ inline void LayerParameter::set_allocated_sort_param(::caffe::SortParameter* sor
 
 // optional .caffe.SSDParameter ssd_param = 139;
 inline bool LayerParameter::has_ssd_param() const {
-  return (_has_bits_[1] & 0x00400000u) != 0;
+  return (_has_bits_[1] & 0x00800000u) != 0;
 }
 inline void LayerParameter::set_has_ssd_param() {
-  _has_bits_[1] |= 0x00400000u;
+  _has_bits_[1] |= 0x00800000u;
 }
 inline void LayerParameter::clear_has_ssd_param() {
-  _has_bits_[1] &= ~0x00400000u;
+  _has_bits_[1] &= ~0x00800000u;
 }
 inline void LayerParameter::clear_ssd_param() {
   if (ssd_param_ != NULL) ssd_param_->::caffe::SSDParameter::Clear();
@@ -15942,13 +16245,13 @@ inline void LayerParameter::set_allocated_ssd_param(::caffe::SSDParameter* ssd_p
 
 // optional .caffe.TanHParameter tanh_param = 127;
 inline bool LayerParameter::has_tanh_param() const {
-  return (_has_bits_[1] & 0x00800000u) != 0;
+  return (_has_bits_[1] & 0x01000000u) != 0;
 }
 inline void LayerParameter::set_has_tanh_param() {
-  _has_bits_[1] |= 0x00800000u;
+  _has_bits_[1] |= 0x01000000u;
 }
 inline void LayerParameter::clear_has_tanh_param() {
-  _has_bits_[1] &= ~0x00800000u;
+  _has_bits_[1] &= ~0x01000000u;
 }
 inline void LayerParameter::clear_tanh_param() {
   if (tanh_param_ != NULL) tanh_param_->::caffe::TanHParameter::Clear();
@@ -15983,13 +16286,13 @@ inline void LayerParameter::set_allocated_tanh_param(::caffe::TanHParameter* tan
 
 // optional .caffe.ThresholdParameter threshold_param = 128;
 inline bool LayerParameter::has_threshold_param() const {
-  return (_has_bits_[1] & 0x01000000u) != 0;
+  return (_has_bits_[1] & 0x02000000u) != 0;
 }
 inline void LayerParameter::set_has_threshold_param() {
-  _has_bits_[1] |= 0x01000000u;
+  _has_bits_[1] |= 0x02000000u;
 }
 inline void LayerParameter::clear_has_threshold_param() {
-  _has_bits_[1] &= ~0x01000000u;
+  _has_bits_[1] &= ~0x02000000u;
 }
 inline void LayerParameter::clear_threshold_param() {
   if (threshold_param_ != NULL) threshold_param_->::caffe::ThresholdParameter::Clear();
@@ -16024,13 +16327,13 @@ inline void LayerParameter::set_allocated_threshold_param(::caffe::ThresholdPara
 
 // optional .caffe.VideoUnrollParameter video_unroll_param = 135;
 inline bool LayerParameter::has_video_unroll_param() const {
-  return (_has_bits_[1] & 0x02000000u) != 0;
+  return (_has_bits_[1] & 0x04000000u) != 0;
 }
 inline void LayerParameter::set_has_video_unroll_param() {
-  _has_bits_[1] |= 0x02000000u;
+  _has_bits_[1] |= 0x04000000u;
 }
 inline void LayerParameter::clear_has_video_unroll_param() {
-  _has_bits_[1] &= ~0x02000000u;
+  _has_bits_[1] &= ~0x04000000u;
 }
 inline void LayerParameter::clear_video_unroll_param() {
   if (video_unroll_param_ != NULL) video_unroll_param_->::caffe::VideoUnrollParameter::Clear();
@@ -16065,13 +16368,13 @@ inline void LayerParameter::set_allocated_video_unroll_param(::caffe::VideoUnrol
 
 // optional .caffe.WindowDataParameter window_data_param = 129;
 inline bool LayerParameter::has_window_data_param() const {
-  return (_has_bits_[1] & 0x04000000u) != 0;
+  return (_has_bits_[1] & 0x08000000u) != 0;
 }
 inline void LayerParameter::set_has_window_data_param() {
-  _has_bits_[1] |= 0x04000000u;
+  _has_bits_[1] |= 0x08000000u;
 }
 inline void LayerParameter::clear_has_window_data_param() {
-  _has_bits_[1] &= ~0x04000000u;
+  _has_bits_[1] &= ~0x08000000u;
 }
 inline void LayerParameter::clear_window_data_param() {
   if (window_data_param_ != NULL) window_data_param_->::caffe::WindowDataParameter::Clear();
@@ -16106,13 +16409,13 @@ inline void LayerParameter::set_allocated_window_data_param(::caffe::WindowDataP
 
 // optional .caffe.NoisyTransParameter noisy_trans_param = 188;
 inline bool LayerParameter::has_noisy_trans_param() const {
-  return (_has_bits_[1] & 0x08000000u) != 0;
+  return (_has_bits_[1] & 0x10000000u) != 0;
 }
 inline void LayerParameter::set_has_noisy_trans_param() {
-  _has_bits_[1] |= 0x08000000u;
+  _has_bits_[1] |= 0x10000000u;
 }
 inline void LayerParameter::clear_has_noisy_trans_param() {
-  _has_bits_[1] &= ~0x08000000u;
+  _has_bits_[1] &= ~0x10000000u;
 }
 inline void LayerParameter::clear_noisy_trans_param() {
   if (noisy_trans_param_ != NULL) noisy_trans_param_->::caffe::NoisyTransParameter::Clear();
@@ -16147,13 +16450,13 @@ inline void LayerParameter::set_allocated_noisy_trans_param(::caffe::NoisyTransP
 
 // optional .caffe.RankNoisyTransParameter rank_noisy_trans_param = 189;
 inline bool LayerParameter::has_rank_noisy_trans_param() const {
-  return (_has_bits_[1] & 0x10000000u) != 0;
+  return (_has_bits_[1] & 0x20000000u) != 0;
 }
 inline void LayerParameter::set_has_rank_noisy_trans_param() {
-  _has_bits_[1] |= 0x10000000u;
+  _has_bits_[1] |= 0x20000000u;
 }
 inline void LayerParameter::clear_has_rank_noisy_trans_param() {
-  _has_bits_[1] &= ~0x10000000u;
+  _has_bits_[1] &= ~0x20000000u;
 }
 inline void LayerParameter::clear_rank_noisy_trans_param() {
   if (rank_noisy_trans_param_ != NULL) rank_noisy_trans_param_->::caffe::RankNoisyTransParameter::Clear();
@@ -16188,13 +16491,13 @@ inline void LayerParameter::set_allocated_rank_noisy_trans_param(::caffe::RankNo
 
 // optional .caffe.SoftmaxNoisyLabelLossParameter softmax_noisy_label_loss_param = 201;
 inline bool LayerParameter::has_softmax_noisy_label_loss_param() const {
-  return (_has_bits_[1] & 0x20000000u) != 0;
+  return (_has_bits_[1] & 0x40000000u) != 0;
 }
 inline void LayerParameter::set_has_softmax_noisy_label_loss_param() {
-  _has_bits_[1] |= 0x20000000u;
+  _has_bits_[1] |= 0x40000000u;
 }
 inline void LayerParameter::clear_has_softmax_noisy_label_loss_param() {
-  _has_bits_[1] &= ~0x20000000u;
+  _has_bits_[1] &= ~0x40000000u;
 }
 inline void LayerParameter::clear_softmax_noisy_label_loss_param() {
   if (softmax_noisy_label_loss_param_ != NULL) softmax_noisy_label_loss_param_->::caffe::SoftmaxNoisyLabelLossParameter::Clear();
@@ -16229,13 +16532,13 @@ inline void LayerParameter::set_allocated_softmax_noisy_label_loss_param(::caffe
 
 // optional .caffe.LatentGaussianParameter latent_guassian_param = 202;
 inline bool LayerParameter::has_latent_guassian_param() const {
-  return (_has_bits_[1] & 0x40000000u) != 0;
+  return (_has_bits_[1] & 0x80000000u) != 0;
 }
 inline void LayerParameter::set_has_latent_guassian_param() {
-  _has_bits_[1] |= 0x40000000u;
+  _has_bits_[1] |= 0x80000000u;
 }
 inline void LayerParameter::clear_has_latent_guassian_param() {
-  _has_bits_[1] &= ~0x40000000u;
+  _has_bits_[1] &= ~0x80000000u;
 }
 inline void LayerParameter::clear_latent_guassian_param() {
   if (latent_guassian_param_ != NULL) latent_guassian_param_->::caffe::LatentGaussianParameter::Clear();
@@ -16270,13 +16573,13 @@ inline void LayerParameter::set_allocated_latent_guassian_param(::caffe::LatentG
 
 // optional .caffe.VarAutoEncoderLossParameter var_autoencoder_loss_param = 203;
 inline bool LayerParameter::has_var_autoencoder_loss_param() const {
-  return (_has_bits_[1] & 0x80000000u) != 0;
+  return (_has_bits_[2] & 0x00000001u) != 0;
 }
 inline void LayerParameter::set_has_var_autoencoder_loss_param() {
-  _has_bits_[1] |= 0x80000000u;
+  _has_bits_[2] |= 0x00000001u;
 }
 inline void LayerParameter::clear_has_var_autoencoder_loss_param() {
-  _has_bits_[1] &= ~0x80000000u;
+  _has_bits_[2] &= ~0x00000001u;
 }
 inline void LayerParameter::clear_var_autoencoder_loss_param() {
   if (var_autoencoder_loss_param_ != NULL) var_autoencoder_loss_param_->::caffe::VarAutoEncoderLossParameter::Clear();
@@ -16307,6 +16610,47 @@ inline void LayerParameter::set_allocated_var_autoencoder_loss_param(::caffe::Va
     clear_has_var_autoencoder_loss_param();
   }
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.var_autoencoder_loss_param)
+}
+
+// optional .caffe.PairWiseSampleLossParameter pairwise_sample_loss_param = 204;
+inline bool LayerParameter::has_pairwise_sample_loss_param() const {
+  return (_has_bits_[2] & 0x00000002u) != 0;
+}
+inline void LayerParameter::set_has_pairwise_sample_loss_param() {
+  _has_bits_[2] |= 0x00000002u;
+}
+inline void LayerParameter::clear_has_pairwise_sample_loss_param() {
+  _has_bits_[2] &= ~0x00000002u;
+}
+inline void LayerParameter::clear_pairwise_sample_loss_param() {
+  if (pairwise_sample_loss_param_ != NULL) pairwise_sample_loss_param_->::caffe::PairWiseSampleLossParameter::Clear();
+  clear_has_pairwise_sample_loss_param();
+}
+inline const ::caffe::PairWiseSampleLossParameter& LayerParameter::pairwise_sample_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.pairwise_sample_loss_param)
+  return pairwise_sample_loss_param_ != NULL ? *pairwise_sample_loss_param_ : *default_instance_->pairwise_sample_loss_param_;
+}
+inline ::caffe::PairWiseSampleLossParameter* LayerParameter::mutable_pairwise_sample_loss_param() {
+  set_has_pairwise_sample_loss_param();
+  if (pairwise_sample_loss_param_ == NULL) pairwise_sample_loss_param_ = new ::caffe::PairWiseSampleLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.pairwise_sample_loss_param)
+  return pairwise_sample_loss_param_;
+}
+inline ::caffe::PairWiseSampleLossParameter* LayerParameter::release_pairwise_sample_loss_param() {
+  clear_has_pairwise_sample_loss_param();
+  ::caffe::PairWiseSampleLossParameter* temp = pairwise_sample_loss_param_;
+  pairwise_sample_loss_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_pairwise_sample_loss_param(::caffe::PairWiseSampleLossParameter* pairwise_sample_loss_param) {
+  delete pairwise_sample_loss_param_;
+  pairwise_sample_loss_param_ = pairwise_sample_loss_param;
+  if (pairwise_sample_loss_param) {
+    set_has_pairwise_sample_loss_param();
+  } else {
+    clear_has_pairwise_sample_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.pairwise_sample_loss_param)
 }
 
 // -------------------------------------------------------------------
@@ -20257,6 +20601,82 @@ inline void PairwiseRankingHingeLossParameter::set_margin(float value) {
 
 // -------------------------------------------------------------------
 
+// PairWiseSampleLossParameter
+
+// optional float margin = 1 [default = 1];
+inline bool PairWiseSampleLossParameter::has_margin() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PairWiseSampleLossParameter::set_has_margin() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PairWiseSampleLossParameter::clear_has_margin() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PairWiseSampleLossParameter::clear_margin() {
+  margin_ = 1;
+  clear_has_margin();
+}
+inline float PairWiseSampleLossParameter::margin() const {
+  // @@protoc_insertion_point(field_get:caffe.PairWiseSampleLossParameter.margin)
+  return margin_;
+}
+inline void PairWiseSampleLossParameter::set_margin(float value) {
+  set_has_margin();
+  margin_ = value;
+  // @@protoc_insertion_point(field_set:caffe.PairWiseSampleLossParameter.margin)
+}
+
+// optional int32 num = 2 [default = 500];
+inline bool PairWiseSampleLossParameter::has_num() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PairWiseSampleLossParameter::set_has_num() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PairWiseSampleLossParameter::clear_has_num() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PairWiseSampleLossParameter::clear_num() {
+  num_ = 500;
+  clear_has_num();
+}
+inline ::google::protobuf::int32 PairWiseSampleLossParameter::num() const {
+  // @@protoc_insertion_point(field_get:caffe.PairWiseSampleLossParameter.num)
+  return num_;
+}
+inline void PairWiseSampleLossParameter::set_num(::google::protobuf::int32 value) {
+  set_has_num();
+  num_ = value;
+  // @@protoc_insertion_point(field_set:caffe.PairWiseSampleLossParameter.num)
+}
+
+// optional bool noisy_flag = 3 [default = true];
+inline bool PairWiseSampleLossParameter::has_noisy_flag() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PairWiseSampleLossParameter::set_has_noisy_flag() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PairWiseSampleLossParameter::clear_has_noisy_flag() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PairWiseSampleLossParameter::clear_noisy_flag() {
+  noisy_flag_ = true;
+  clear_has_noisy_flag();
+}
+inline bool PairWiseSampleLossParameter::noisy_flag() const {
+  // @@protoc_insertion_point(field_get:caffe.PairWiseSampleLossParameter.noisy_flag)
+  return noisy_flag_;
+}
+inline void PairWiseSampleLossParameter::set_noisy_flag(bool value) {
+  set_has_noisy_flag();
+  noisy_flag_ = value;
+  // @@protoc_insertion_point(field_set:caffe.PairWiseSampleLossParameter.noisy_flag)
+}
+
+// -------------------------------------------------------------------
+
 // TripletConstraintRankingLossParameter
 
 // optional float Lamda = 1 [default = 1];
@@ -20381,6 +20801,106 @@ inline void TripletRankingHingeLossParameter::set_margin(float value) {
   set_has_margin();
   margin_ = value;
   // @@protoc_insertion_point(field_set:caffe.TripletRankingHingeLossParameter.margin)
+}
+
+// -------------------------------------------------------------------
+
+// TripletClipHingeLossParameter
+
+// optional int32 dim = 1 [default = 10];
+inline bool TripletClipHingeLossParameter::has_dim() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void TripletClipHingeLossParameter::set_has_dim() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void TripletClipHingeLossParameter::clear_has_dim() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void TripletClipHingeLossParameter::clear_dim() {
+  dim_ = 10;
+  clear_has_dim();
+}
+inline ::google::protobuf::int32 TripletClipHingeLossParameter::dim() const {
+  // @@protoc_insertion_point(field_get:caffe.TripletClipHingeLossParameter.dim)
+  return dim_;
+}
+inline void TripletClipHingeLossParameter::set_dim(::google::protobuf::int32 value) {
+  set_has_dim();
+  dim_ = value;
+  // @@protoc_insertion_point(field_set:caffe.TripletClipHingeLossParameter.dim)
+}
+
+// optional float margin = 2 [default = 1];
+inline bool TripletClipHingeLossParameter::has_margin() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void TripletClipHingeLossParameter::set_has_margin() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void TripletClipHingeLossParameter::clear_has_margin() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void TripletClipHingeLossParameter::clear_margin() {
+  margin_ = 1;
+  clear_has_margin();
+}
+inline float TripletClipHingeLossParameter::margin() const {
+  // @@protoc_insertion_point(field_get:caffe.TripletClipHingeLossParameter.margin)
+  return margin_;
+}
+inline void TripletClipHingeLossParameter::set_margin(float value) {
+  set_has_margin();
+  margin_ = value;
+  // @@protoc_insertion_point(field_set:caffe.TripletClipHingeLossParameter.margin)
+}
+
+// optional int32 frame_num = 3 [default = 7];
+inline bool TripletClipHingeLossParameter::has_frame_num() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void TripletClipHingeLossParameter::set_has_frame_num() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void TripletClipHingeLossParameter::clear_has_frame_num() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void TripletClipHingeLossParameter::clear_frame_num() {
+  frame_num_ = 7;
+  clear_has_frame_num();
+}
+inline ::google::protobuf::int32 TripletClipHingeLossParameter::frame_num() const {
+  // @@protoc_insertion_point(field_get:caffe.TripletClipHingeLossParameter.frame_num)
+  return frame_num_;
+}
+inline void TripletClipHingeLossParameter::set_frame_num(::google::protobuf::int32 value) {
+  set_has_frame_num();
+  frame_num_ = value;
+  // @@protoc_insertion_point(field_set:caffe.TripletClipHingeLossParameter.frame_num)
+}
+
+// optional float lamda = 4 [default = 0.5];
+inline bool TripletClipHingeLossParameter::has_lamda() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void TripletClipHingeLossParameter::set_has_lamda() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void TripletClipHingeLossParameter::clear_has_lamda() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void TripletClipHingeLossParameter::clear_lamda() {
+  lamda_ = 0.5f;
+  clear_has_lamda();
+}
+inline float TripletClipHingeLossParameter::lamda() const {
+  // @@protoc_insertion_point(field_get:caffe.TripletClipHingeLossParameter.lamda)
+  return lamda_;
+}
+inline void TripletClipHingeLossParameter::set_lamda(float value) {
+  set_has_lamda();
+  lamda_ = value;
+  // @@protoc_insertion_point(field_set:caffe.TripletClipHingeLossParameter.lamda)
 }
 
 // -------------------------------------------------------------------
@@ -24642,15 +25162,56 @@ inline void V1LayerParameter::set_allocated_triplet_ranking_hinge_loss_param(::c
   // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.triplet_ranking_hinge_loss_param)
 }
 
-// optional .caffe.NoisyTransParameter noisy_trans_param = 86;
-inline bool V1LayerParameter::has_noisy_trans_param() const {
+// optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 49;
+inline bool V1LayerParameter::has_triplet_clip_hinge_loss_param() const {
   return (_has_bits_[1] & 0x00010000u) != 0;
 }
-inline void V1LayerParameter::set_has_noisy_trans_param() {
+inline void V1LayerParameter::set_has_triplet_clip_hinge_loss_param() {
   _has_bits_[1] |= 0x00010000u;
 }
-inline void V1LayerParameter::clear_has_noisy_trans_param() {
+inline void V1LayerParameter::clear_has_triplet_clip_hinge_loss_param() {
   _has_bits_[1] &= ~0x00010000u;
+}
+inline void V1LayerParameter::clear_triplet_clip_hinge_loss_param() {
+  if (triplet_clip_hinge_loss_param_ != NULL) triplet_clip_hinge_loss_param_->::caffe::TripletClipHingeLossParameter::Clear();
+  clear_has_triplet_clip_hinge_loss_param();
+}
+inline const ::caffe::TripletClipHingeLossParameter& V1LayerParameter::triplet_clip_hinge_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.triplet_clip_hinge_loss_param)
+  return triplet_clip_hinge_loss_param_ != NULL ? *triplet_clip_hinge_loss_param_ : *default_instance_->triplet_clip_hinge_loss_param_;
+}
+inline ::caffe::TripletClipHingeLossParameter* V1LayerParameter::mutable_triplet_clip_hinge_loss_param() {
+  set_has_triplet_clip_hinge_loss_param();
+  if (triplet_clip_hinge_loss_param_ == NULL) triplet_clip_hinge_loss_param_ = new ::caffe::TripletClipHingeLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.triplet_clip_hinge_loss_param)
+  return triplet_clip_hinge_loss_param_;
+}
+inline ::caffe::TripletClipHingeLossParameter* V1LayerParameter::release_triplet_clip_hinge_loss_param() {
+  clear_has_triplet_clip_hinge_loss_param();
+  ::caffe::TripletClipHingeLossParameter* temp = triplet_clip_hinge_loss_param_;
+  triplet_clip_hinge_loss_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_triplet_clip_hinge_loss_param(::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param) {
+  delete triplet_clip_hinge_loss_param_;
+  triplet_clip_hinge_loss_param_ = triplet_clip_hinge_loss_param;
+  if (triplet_clip_hinge_loss_param) {
+    set_has_triplet_clip_hinge_loss_param();
+  } else {
+    clear_has_triplet_clip_hinge_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.triplet_clip_hinge_loss_param)
+}
+
+// optional .caffe.NoisyTransParameter noisy_trans_param = 86;
+inline bool V1LayerParameter::has_noisy_trans_param() const {
+  return (_has_bits_[1] & 0x00020000u) != 0;
+}
+inline void V1LayerParameter::set_has_noisy_trans_param() {
+  _has_bits_[1] |= 0x00020000u;
+}
+inline void V1LayerParameter::clear_has_noisy_trans_param() {
+  _has_bits_[1] &= ~0x00020000u;
 }
 inline void V1LayerParameter::clear_noisy_trans_param() {
   if (noisy_trans_param_ != NULL) noisy_trans_param_->::caffe::NoisyTransParameter::Clear();
@@ -24685,13 +25246,13 @@ inline void V1LayerParameter::set_allocated_noisy_trans_param(::caffe::NoisyTran
 
 // optional .caffe.RankNoisyTransParameter rank_noisy_trans_param = 68;
 inline bool V1LayerParameter::has_rank_noisy_trans_param() const {
-  return (_has_bits_[1] & 0x00020000u) != 0;
+  return (_has_bits_[1] & 0x00040000u) != 0;
 }
 inline void V1LayerParameter::set_has_rank_noisy_trans_param() {
-  _has_bits_[1] |= 0x00020000u;
+  _has_bits_[1] |= 0x00040000u;
 }
 inline void V1LayerParameter::clear_has_rank_noisy_trans_param() {
-  _has_bits_[1] &= ~0x00020000u;
+  _has_bits_[1] &= ~0x00040000u;
 }
 inline void V1LayerParameter::clear_rank_noisy_trans_param() {
   if (rank_noisy_trans_param_ != NULL) rank_noisy_trans_param_->::caffe::RankNoisyTransParameter::Clear();
@@ -24726,13 +25287,13 @@ inline void V1LayerParameter::set_allocated_rank_noisy_trans_param(::caffe::Rank
 
 // optional .caffe.LatentGaussianParameter latent_guassian_param = 46;
 inline bool V1LayerParameter::has_latent_guassian_param() const {
-  return (_has_bits_[1] & 0x00040000u) != 0;
+  return (_has_bits_[1] & 0x00080000u) != 0;
 }
 inline void V1LayerParameter::set_has_latent_guassian_param() {
-  _has_bits_[1] |= 0x00040000u;
+  _has_bits_[1] |= 0x00080000u;
 }
 inline void V1LayerParameter::clear_has_latent_guassian_param() {
-  _has_bits_[1] &= ~0x00040000u;
+  _has_bits_[1] &= ~0x00080000u;
 }
 inline void V1LayerParameter::clear_latent_guassian_param() {
   if (latent_guassian_param_ != NULL) latent_guassian_param_->::caffe::LatentGaussianParameter::Clear();
@@ -24767,13 +25328,13 @@ inline void V1LayerParameter::set_allocated_latent_guassian_param(::caffe::Laten
 
 // optional .caffe.VarAutoEncoderLossParameter var_autoencoder_loss_param = 47;
 inline bool V1LayerParameter::has_var_autoencoder_loss_param() const {
-  return (_has_bits_[1] & 0x00080000u) != 0;
+  return (_has_bits_[1] & 0x00100000u) != 0;
 }
 inline void V1LayerParameter::set_has_var_autoencoder_loss_param() {
-  _has_bits_[1] |= 0x00080000u;
+  _has_bits_[1] |= 0x00100000u;
 }
 inline void V1LayerParameter::clear_has_var_autoencoder_loss_param() {
-  _has_bits_[1] &= ~0x00080000u;
+  _has_bits_[1] &= ~0x00100000u;
 }
 inline void V1LayerParameter::clear_var_autoencoder_loss_param() {
   if (var_autoencoder_loss_param_ != NULL) var_autoencoder_loss_param_->::caffe::VarAutoEncoderLossParameter::Clear();
@@ -24806,15 +25367,56 @@ inline void V1LayerParameter::set_allocated_var_autoencoder_loss_param(::caffe::
   // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.var_autoencoder_loss_param)
 }
 
+// optional .caffe.PairWiseSampleLossParameter pairwise_sample_loss_param = 48;
+inline bool V1LayerParameter::has_pairwise_sample_loss_param() const {
+  return (_has_bits_[1] & 0x00200000u) != 0;
+}
+inline void V1LayerParameter::set_has_pairwise_sample_loss_param() {
+  _has_bits_[1] |= 0x00200000u;
+}
+inline void V1LayerParameter::clear_has_pairwise_sample_loss_param() {
+  _has_bits_[1] &= ~0x00200000u;
+}
+inline void V1LayerParameter::clear_pairwise_sample_loss_param() {
+  if (pairwise_sample_loss_param_ != NULL) pairwise_sample_loss_param_->::caffe::PairWiseSampleLossParameter::Clear();
+  clear_has_pairwise_sample_loss_param();
+}
+inline const ::caffe::PairWiseSampleLossParameter& V1LayerParameter::pairwise_sample_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.pairwise_sample_loss_param)
+  return pairwise_sample_loss_param_ != NULL ? *pairwise_sample_loss_param_ : *default_instance_->pairwise_sample_loss_param_;
+}
+inline ::caffe::PairWiseSampleLossParameter* V1LayerParameter::mutable_pairwise_sample_loss_param() {
+  set_has_pairwise_sample_loss_param();
+  if (pairwise_sample_loss_param_ == NULL) pairwise_sample_loss_param_ = new ::caffe::PairWiseSampleLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.pairwise_sample_loss_param)
+  return pairwise_sample_loss_param_;
+}
+inline ::caffe::PairWiseSampleLossParameter* V1LayerParameter::release_pairwise_sample_loss_param() {
+  clear_has_pairwise_sample_loss_param();
+  ::caffe::PairWiseSampleLossParameter* temp = pairwise_sample_loss_param_;
+  pairwise_sample_loss_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_pairwise_sample_loss_param(::caffe::PairWiseSampleLossParameter* pairwise_sample_loss_param) {
+  delete pairwise_sample_loss_param_;
+  pairwise_sample_loss_param_ = pairwise_sample_loss_param;
+  if (pairwise_sample_loss_param) {
+    set_has_pairwise_sample_loss_param();
+  } else {
+    clear_has_pairwise_sample_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.pairwise_sample_loss_param)
+}
+
 // optional .caffe.V0LayerParameter layer = 1;
 inline bool V1LayerParameter::has_layer() const {
-  return (_has_bits_[1] & 0x00100000u) != 0;
+  return (_has_bits_[1] & 0x00400000u) != 0;
 }
 inline void V1LayerParameter::set_has_layer() {
-  _has_bits_[1] |= 0x00100000u;
+  _has_bits_[1] |= 0x00400000u;
 }
 inline void V1LayerParameter::clear_has_layer() {
-  _has_bits_[1] &= ~0x00100000u;
+  _has_bits_[1] &= ~0x00400000u;
 }
 inline void V1LayerParameter::clear_layer() {
   if (layer_ != NULL) layer_->::caffe::V0LayerParameter::Clear();
